@@ -14,6 +14,7 @@ Testnet-only TypeScript project built on `@cheqd/sdk`. Read this before writing 
 
 | Command | Does | Success looks like |
 |---|---|---|
+| `npm run 00:login [-- --signup]` | Opens the browser to sign in to (or sign up for) cheqd Studio, creates an API key and saves it to `.env` as `STUDIO_API_KEY`. The user completes the sign-in; you never see the key | `Saved a new cheqd Studio API key to .env` |
 | `npm run 01:wallet` | Creates a mnemonic in `.env` (or reuses it), prints the `cheqd1...` address | prints `Address: cheqd1...` |
 | `npm run 02:fund` | Asks Studio's faucet to fund the wallet (`FUND_AMOUNT_CHEQ`, default 10000) | `Funded cheqd1... via <studio url>` and `funded: true` |
 | `npm run 03:balance [-- --wait]` | Reads `ncheq` balance; `--wait` polls every 5s | exit 0 with a positive balance; exit 2 if zero |
@@ -87,7 +88,7 @@ The public site `testnet-faucet.cheqd.io` is behind Cloudflare Access; do not us
 
 ## Running in a cloud sandbox
 
-If you run in a remote sandbox (Codex cloud, Copilot cloud agent, Jules) and requests to `rpc.cheqd.network`, `studio-api.cheqd.net` or `resolver.cheqd.net` fail with DNS, connection or firewall errors, stop and tell the user to allow those hosts. Do not try other RPC endpoints. If `STUDIO_API_KEY` is not visible, ask the user to provide it as an environment variable; never ask for it in chat.
+If you run in a remote sandbox (Codex cloud, Copilot cloud agent, Jules) and requests to `rpc.cheqd.network`, `studio-api.cheqd.net` or `resolver.cheqd.net` fail with DNS, connection or firewall errors, stop and tell the user to allow those hosts. Do not try other RPC endpoints. If `STUDIO_API_KEY` is not visible, ask the user to provide it as an environment variable; never ask for it in chat. `npm run 00:login` needs a browser on the same machine, so it does not work in a cloud sandbox.
 
 ## Scope
 

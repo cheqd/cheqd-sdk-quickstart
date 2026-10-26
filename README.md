@@ -11,7 +11,8 @@ Go from nothing to a created and resolved `did:cheqd` DID on testnet with [`@che
 
 ```bash
 npm install
-cp .env.example .env       # then set STUDIO_API_KEY
+cp .env.example .env
+npm run 00:login           # sign in to (or sign up for) cheqd Studio in your browser; saves STUDIO_API_KEY to .env
 npm run 01:wallet          # creates a testnet mnemonic in .env and prints its cheqd1… address
 npm run 02:fund            # Studio faucet funds that address (FUND_AMOUNT_CHEQ, default 10,000)
 npm run 03:balance -- --wait
@@ -53,7 +54,7 @@ Open the project in your agent and ask it to "create a cheqd DID on testnet". It
 | Gemini CLI | `AGENTS.md`, via `.gemini/settings.json` | `.agents/skills/` |
 | Other agents that read `AGENTS.md` | `AGENTS.md` | Ask it to follow `.agents/skills/cheqd-sdk-quickstart/SKILL.md` |
 
-Each agent stops at `02:fund` if `STUDIO_API_KEY` is missing and prints how to get one: you create the cheqd Studio account yourself.
+If `STUDIO_API_KEY` is missing, the agent runs `npm run 00:login`: a browser window opens for you to sign in to (or sign up for) cheqd Studio, and the script saves a new key to `.env`. The agent never sees the key, and you are the one who signs in.
 
 **Cloud agents** (Codex cloud, Copilot cloud agent, Jules) run in a remote sandbox, so:
 

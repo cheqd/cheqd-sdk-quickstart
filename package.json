@@ -4,6 +4,7 @@
   "description": "From nothing to a created and resolved did:cheqd DID on testnet with @cheqd/sdk, funded through cheqd Studio.",
   "scripts": {
     "typecheck": "tsc",
+    "00:login": "tsx src/00-login.ts",
     "01:wallet": "tsx src/01-wallet.ts",
     "02:fund": "tsx src/02-fund.ts",
     "03:balance": "tsx src/03-balance.ts",

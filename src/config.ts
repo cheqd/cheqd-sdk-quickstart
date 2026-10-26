@@ -33,7 +33,7 @@ export function requireMnemonic(): string {
 export function requireStudioApiKey(): string {
 	const k = process.env.STUDIO_API_KEY;
 	if (!k) {
-		console.error(`STUDIO_API_KEY is not set. To get one:
+		console.error(`STUDIO_API_KEY is not set. Run \`npm run 00:login\` to sign in (or sign up) in your browser and save a key, or get one by hand:
   1. Sign up at https://studio.cheqd.net/ with Google, GitHub or an email address.
      New accounts start a 30-day Basic trial, which includes the testnet faucet.
   2. Open https://studio.cheqd.net/developers (user menu > API Keys) and create a key.
