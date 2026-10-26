@@ -21,12 +21,22 @@ try {
 	// leave as text
 }
 
+const resetsAt = (body as { quota?: { resetsAt?: string } })?.quota?.resetsAt;
 if (res.status === 429) {
-	console.error(`Rate limited. Retry after ${res.headers.get('retry-after') ?? '?'}s.`, body);
+	console.error(
+		resetsAt
+			? `This Studio account has used its monthly faucet quota. It resets at ${resetsAt}.`
+			: `Too many requests. Retry after ${res.headers.get('retry-after') ?? '?'} seconds.`,
+		body
+	);
 	process.exit(3);
 }
+const hints: Record<number, string> = {
+	401: 'Studio did not accept STUDIO_API_KEY. Check it in .env, or create a new key at https://studio.cheqd.net/developers.',
+	403: 'The faucet needs an active Basic or Build plan, or the 30-day trial. Check https://studio.cheqd.net/settings/billing.',
+};
 if (!res.ok) {
-	console.error(`Studio faucet returned ${res.status}:`, body);
+	console.error(`Studio faucet returned ${res.status}.`, hints[res.status] ?? '', body);
 	process.exit(1);
 }
 console.log(`Funded ${address} via ${config.studioApiUrl}`);

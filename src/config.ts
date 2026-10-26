@@ -32,6 +32,13 @@ export function requireMnemonic(): string {
 
 export function requireStudioApiKey(): string {
 	const k = process.env.STUDIO_API_KEY;
-	if (!k) throw new Error('STUDIO_API_KEY is not set. Create an API key in cheqd Studio and add it to .env.');
+	if (!k) {
+		console.error(`STUDIO_API_KEY is not set. To get one:
+  1. Sign up at https://studio.cheqd.net/ with Google, GitHub or an email address.
+     New accounts start a 30-day Basic trial, which includes the testnet faucet.
+  2. Open https://studio.cheqd.net/developers (user menu > API Keys) and create a key.
+  3. Add it to .env as STUDIO_API_KEY=... and run this step again.`);
+		process.exit(2);
+	}
 	return k;
 }
