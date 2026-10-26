@@ -9,7 +9,7 @@ Read `AGENTS.md` in the project root first: it holds the rules, the commands and
 
 ## Procedure
 
-1. Check preconditions: Node >= 22 (`node -v`), `npm install` done, `.env` exists with `STUDIO_API_KEY` set. Never print the key or the mnemonic. If `STUDIO_API_KEY` is empty, stop and ask the user to add it to `.env` themselves.
+1. Check preconditions: Node >= 22 (`node -v`), `npm install` done, `.env` exists with `STUDIO_API_KEY` set. Never print the key or the mnemonic. If `STUDIO_API_KEY` is empty, tell the user a browser window will open for them to sign in to (or sign up for) cheqd Studio, then run `npm run 00:login` (add `-- --signup` for a new account) and wait for it to finish. If it cannot open a browser or fails, stop and ask the user to add a key to `.env` themselves.
 2. Run `npm run typecheck`. Do not continue on failure.
 3. Run `npm run journey` (wallet, fund, balance, create DID, resolve). If funding returns 401/403/429, stop and report the status and body.
 4. Report the resolved DID and the transaction hash. Do not claim success without the line `Resolved did:cheqd:testnet:...`.
