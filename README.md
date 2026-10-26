@@ -36,8 +36,32 @@ This copies the scripts, `AGENTS.md`, `CLAUDE.md` and the Claude Code skill. It 
 | `src/01…08-*.ts`, `src/sdk.ts`, `src/config.ts` | The journey, testnet only |
 | `src/alt/studio-rest.ts` | The same outcomes through the cheqd Studio REST API (`npx tsx src/alt/studio-rest.ts`) |
 | `AGENTS.md` / `CLAUDE.md` | Instructions for coding agents, including SDK behaviour the docs don't cover yet |
-| `.claude/skills/cheqd-sdk-quickstart/` | Claude Code skill that runs the journey |
+| `.agents/skills/cheqd-sdk-quickstart/` | Agent skill that runs the journey (`.claude/skills/` links to it for Claude Code) |
+| `.gemini/settings.json` | Makes Gemini CLI read `AGENTS.md` |
 | `bin/create-cheqd-sdk-app.mjs` | Scaffolds a clean copy |
+
+## Use with a coding agent
+
+Open the project in your agent and ask it to "create a cheqd DID on testnet". It reads the instructions and the skill from these files:
+
+| Agent | Instructions | Skill |
+|---|---|---|
+| Claude Code | `CLAUDE.md`, which imports `AGENTS.md` | `.claude/skills/` |
+| OpenAI Codex (CLI, IDE, app) | `AGENTS.md` | `.agents/skills/` |
+| Cursor | `AGENTS.md` | `.agents/skills/` |
+| GitHub Copilot (VS Code agent mode, CLI, cloud agent) | `AGENTS.md` | `.agents/skills/` |
+| Gemini CLI | `AGENTS.md`, via `.gemini/settings.json` | `.agents/skills/` |
+| Other agents that read `AGENTS.md` | `AGENTS.md` | Ask it to follow `.agents/skills/cheqd-sdk-quickstart/SKILL.md` |
+
+Each agent stops at `02:fund` if `STUDIO_API_KEY` is missing and prints how to get one: you create the cheqd Studio account yourself.
+
+**Cloud agents** (Codex cloud, Copilot cloud agent, Jules) run in a remote sandbox, so:
+
+- Allow outbound access to `rpc.cheqd.network`, `studio-api.cheqd.net` and `resolver.cheqd.net`. Codex cloud turns internet access off during the agent phase by default, and Copilot's firewall only allows a default list of hosts.
+- Give the agent `STUDIO_API_KEY` as an environment variable it can read while it works. Codex cloud removes *secrets* before the agent phase, so set it as an environment variable there, or run `npm run 01:wallet && npm run 02:fund` in the setup script.
+- The wallet mnemonic and `.did.json` live only in that sandbox. They are fine for a testnet demo, but you cannot update or deactivate the DID later unless you keep them.
+
+**ChatGPT** (the chat app) cannot run this project, because it has no shell on your machine. Use Codex, which comes with ChatGPT plans, instead.
 
 ## Safety
 
