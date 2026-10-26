@@ -18,8 +18,9 @@ if (existsSync(target) && readdirSync(target).length > 0) {
 mkdirSync(target, { recursive: true });
 
 // Copy everything the generated project needs; never secrets, state or probes.
-const include = ['AGENTS.md', 'CLAUDE.md', 'README.md', 'tsconfig.json', '.gitignore', '.env.example', '.claude'];
-for (const f of include) cpSync(join(root, f), join(target, f), { recursive: true });
+const include = ['AGENTS.md', 'CLAUDE.md', 'README.md', 'tsconfig.json', '.gitignore', '.env.example', '.agents', '.claude', '.gemini'];
+// verbatimSymlinks keeps .claude/skills pointing at .agents/skills relatively, not at this checkout
+for (const f of include) cpSync(join(root, f), join(target, f), { recursive: true, verbatimSymlinks: true });
 cpSync(join(root, 'src'), join(target, 'src'), { recursive: true, filter: (p) => !p.includes(`${join('src', 'tools')}`) });
 
 // Take dependency versions from this repo's package.json so they stay in step with what was tested.
