@@ -48,3 +48,7 @@ Testnet only: `src/config.ts` refuses to run against mainnet. `.env` (your mnemo
 - [Setup the cheqd SDK](https://docs.cheqd.io/product/advanced/sdk/setup-the-cheqd-sdk)
 - [Testnet Faucet](https://docs.cheqd.io/product/network/tools/testnet-faucet)
 - [Choosing an SDK](https://docs.cheqd.io/product/sdk/understanding-sdks)
+
+## Licence
+
+[Apache 2.0](LICENSE)
