@@ -1,0 +1,34 @@
+{
+  "name": "cheqd-sdk-quickstart",
+  "version": "1.0.0",
+  "description": "From nothing to a created and resolved did:cheqd DID on testnet with @cheqd/sdk, funded through cheqd Studio.",
+  "scripts": {
+    "typecheck": "tsc",
+    "01:wallet": "tsx src/01-wallet.ts",
+    "02:fund": "tsx src/02-fund.ts",
+    "03:balance": "tsx src/03-balance.ts",
+    "04:create-did": "tsx src/04-create-did.ts",
+    "05:resolve": "tsx src/05-resolve.ts",
+    "06:create-resource": "tsx src/06-create-resource.ts",
+    "07:update-did": "tsx src/07-update-did.ts",
+    "08:deactivate-did": "tsx src/08-deactivate-did.ts",
+    "journey": "npm run 01:wallet && npm run 02:fund && npm run 03:balance -- --wait && npm run 04:create-did && npm run 05:resolve"
+  },
+  "keywords": [],
+  "author": "cheqd",
+  "license": "ISC",
+  "type": "module",
+  "private": "true",
+  "dependencies": {
+    "@cheqd/sdk": "^5.5.1",
+    "@cosmjs/proto-signing": "^0.36.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
