@@ -12,7 +12,8 @@ const loginEndpoint = process.env.CHEQD_LOGIN_ENDPOINT ?? 'https://service-auth.
 const clientId = process.env.CHEQD_LOGIN_APP_ID ?? '';
 const port = Number(process.env.CHEQD_LOGIN_PORT ?? 47123);
 const redirectUri = `http://127.0.0.1:${port}/callback`;
-const signUp = process.argv.includes('--signup');
+// First-time users are the common case, so default to the registration screen; --signin opts into sign-in instead.
+const signUp = !process.argv.includes('--signin');
 const force = process.argv.includes('--force');
 const noBrowser = process.argv.includes('--no-browser');
 const timeoutMs = 5 * 60 * 1000;
