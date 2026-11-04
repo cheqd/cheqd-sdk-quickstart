@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { hostname } from 'node:os';
 import { config } from './config.js';
@@ -33,6 +33,7 @@ const base64url = (buf: Buffer) => buf.toString('base64url');
 const verifier = base64url(randomBytes(32));
 const challenge = base64url(createHash('sha256').update(verifier).digest());
 const state = base64url(randomBytes(16));
+const nonce = base64url(randomBytes(16));
 
 const authUrl = new URL('/oidc/auth', loginEndpoint);
 authUrl.search = new URLSearchParams({
@@ -43,11 +44,13 @@ authUrl.search = new URLSearchParams({
 	code_challenge: challenge,
 	code_challenge_method: 'S256',
 	state,
+	nonce,
 	...(signUp ? { first_screen: 'register' } : {}),
 }).toString();
 
 const code = await waitForCode();
 const idToken = await exchangeCode(code);
+checkNonce(idToken);
 const apiKey = await createApiKey(idToken);
 saveApiKey(apiKey);
 console.log('Saved a new cheqd Studio API key to .env as STUDIO_API_KEY.');
@@ -127,6 +130,15 @@ async function exchangeCode(authCode: string): Promise<string> {
 	return body.id_token;
 }
 
+// Confirms the ID token was issued for this exact authorization request, not replayed from another one.
+// Studio independently verifies the token's signature, issuer and audience; this only checks the nonce claim.
+function checkNonce(idToken: string) {
+	const payload = idToken.split('.')[1];
+	if (!payload) throw new Error('ID token is not a JWT.');
+	const claims = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as { nonce?: string };
+	if (claims.nonce !== nonce) throw new Error('ID token nonce does not match the authorization request.');
+}
+
 // A new account is set up by Studio a few seconds after sign-up, so retry while Studio does not know the user yet.
 async function createApiKey(token: string): Promise<string> {
 	const deadline = Date.now() + 90_000;
@@ -157,11 +169,13 @@ async function createApiKey(token: string): Promise<string> {
 }
 
 function saveApiKey(key: string) {
-	if (!existsSync('.env')) writeFileSync('.env', readFileSync('.env.example', 'utf8'));
+	if (!existsSync('.env')) writeFileSync('.env', readFileSync('.env.example', 'utf8'), { mode: 0o600 });
 	const env = readFileSync('.env', 'utf8');
 	const line = `STUDIO_API_KEY="${key}"`;
 	writeFileSync(
 		'.env',
-		/^STUDIO_API_KEY=.*$/m.test(env) ? env.replace(/^STUDIO_API_KEY=.*$/m, line) : `${env.trimEnd()}\n${line}\n`
+		/^STUDIO_API_KEY=.*$/m.test(env) ? env.replace(/^STUDIO_API_KEY=.*$/m, line) : `${env.trimEnd()}\n${line}\n`,
+		{ mode: 0o600 }
 	);
+	chmodSync('.env', 0o600);
 }
