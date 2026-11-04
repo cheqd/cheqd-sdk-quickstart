@@ -9,7 +9,7 @@ import { config } from './config.js';
 // STUDIO_API_KEY. The key never appears in the terminal. Uses OAuth authorisation code with PKCE against cheqd's
 // LogTo, through a "Native" application that redirects to this machine.
 const loginEndpoint = process.env.CHEQD_LOGIN_ENDPOINT ?? 'https://service-auth.cheqd.net';
-const clientId = process.env.CHEQD_LOGIN_APP_ID ?? '';
+const clientId = process.env.CHEQD_LOGIN_APP_ID ?? '9dvd1ag87qrtbwi6vp83j';
 const port = Number(process.env.CHEQD_LOGIN_PORT ?? 47123);
 const redirectUri = `http://127.0.0.1:${port}/callback`;
 // First-time users are the common case, so default to the registration screen; --signin opts into sign-in instead.
